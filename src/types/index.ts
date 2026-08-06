@@ -266,6 +266,54 @@ export interface MessageReaction {
   created_at: string;
 }
 
+export interface SocialConfig {
+  id: string;
+  account_id: string;
+  user_id: string;
+  page_id?: string;
+  page_name?: string;
+  page_access_token?: string;
+  ig_business_account_id?: string;
+  ig_username?: string;
+  status: 'connected' | 'disconnected';
+  connected_at?: string;
+  last_verify_error?: string;
+}
+
+export type SocialPlatformStatus = 'pending' | 'success' | 'failed';
+export type SocialPostStatus =
+  | 'draft'
+  | 'scheduled'
+  | 'publishing'
+  | 'published'
+  | 'partial'
+  | 'failed'
+  | 'canceled';
+
+export interface SocialPost {
+  id: string;
+  account_id: string;
+  user_id: string;
+  caption?: string;
+  media_path: string;
+  media_url: string;
+  media_type: 'image' | 'video';
+  target_facebook: boolean;
+  target_instagram: boolean;
+  run_at: string;
+  status: SocialPostStatus;
+  fb_status?: SocialPlatformStatus;
+  fb_post_id?: string;
+  fb_error?: string;
+  ig_status?: SocialPlatformStatus;
+  ig_post_id?: string;
+  ig_container_id?: string;
+  ig_error?: string;
+  published_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface WhatsAppConfig {
   id: string;
   user_id: string;

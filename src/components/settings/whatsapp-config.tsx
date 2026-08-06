@@ -33,6 +33,22 @@ import type { WhatsAppConfig as WhatsAppConfigType } from '@/types';
 
 const MASKED_TOKEN = '••••••••••••••••';
 
+/**
+ * Passed to `t.markup()` for the setup-instructions accordion items that
+ * need a styled <strong> inside translated copy. Previously these keys
+ * embedded `<strong class="text-foreground">` directly in the message
+ * string and were read with `t()` + dangerouslySetInnerHTML — but
+ * next-intl parses every message as ICU MessageFormat, whose tag syntax
+ * only recognizes bare tag names (`<strong>`), not ones carrying
+ * attributes. That made `t()` throw `INVALID_TAG` for those keys (in
+ * every locale, not just non-English ones — it was just silently
+ * swallowed until the Spanish locale surfaced it as a visible dev-overlay
+ * error). `t.markup()` is next-intl's built-in for exactly this case: the
+ * translated message only needs a bare `<strong>` tag, and the actual
+ * HTML (with attributes) is supplied here in code.
+ */
+const strongMarkup = (chunks: string) => `<strong class="text-foreground">${chunks}</strong>`;
+
 type ConnectionStatus = 'connected' | 'disconnected' | 'unknown';
 type ResetReason = 'token_corrupted' | 'meta_api_error' | null;
 
@@ -180,6 +196,11 @@ export function WhatsAppConfig() {
     if (loadedAccountIdRef.current === accountId) return;
     loadedAccountIdRef.current = accountId;
     fetchConfig(accountId);
+    // `user?.id` (not `user`) is intentional — a token refresh yields a
+    // new `user` object with the same id, and re-running this fetch on
+    // every refresh would be wasted work. The effect body only reads
+    // `user` for the truthy/null check above.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading, profileLoading, user?.id, accountId, fetchConfig]);
 
   async function handleSave() {
@@ -794,9 +815,9 @@ export function WhatsAppConfig() {
                 <AccordionContent className="text-muted-foreground">
                   <ol className="list-decimal list-inside space-y-1 text-sm">
                     <li>{t('step3_1')}</li>
-                    <li dangerouslySetInnerHTML={{ __html: t('step3_2') }} />
-                    <li dangerouslySetInnerHTML={{ __html: t('step3_3') }} />
-                    <li dangerouslySetInnerHTML={{ __html: t('step3_4') }} />
+                    <li dangerouslySetInnerHTML={{ __html: t.markup('step3_2', { strong: strongMarkup }) }} />
+                    <li dangerouslySetInnerHTML={{ __html: t.markup('step3_3', { strong: strongMarkup }) }} />
+                    <li dangerouslySetInnerHTML={{ __html: t.markup('step3_4', { strong: strongMarkup }) }} />
                   </ol>
                 </AccordionContent>
               </AccordionItem>
@@ -812,8 +833,8 @@ export function WhatsAppConfig() {
                   <ol className="list-decimal list-inside space-y-1 text-sm">
                     <li>{t('step4_1')}</li>
                     <li>{t('step4_2')}</li>
-                    <li dangerouslySetInnerHTML={{ __html: t('step4_3') }} />
-                    <li dangerouslySetInnerHTML={{ __html: t('step4_4') }} />
+                    <li dangerouslySetInnerHTML={{ __html: t.markup('step4_3', { strong: strongMarkup }) }} />
+                    <li dangerouslySetInnerHTML={{ __html: t.markup('step4_4', { strong: strongMarkup }) }} />
                     <li>{t('step4_5')}</li>
                   </ol>
                 </AccordionContent>
