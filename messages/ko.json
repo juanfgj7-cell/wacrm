@@ -22,6 +22,7 @@
     "contacts": "연락처",
     "pipelines": "파이프라인",
     "broadcasts": "브로드캐스트",
+    "socialPosts": "소셜 게시물",
     "automations": "자동화",
     "flows": "플로우",
     "aiAgents": "AI 에이전트",
@@ -767,6 +768,112 @@
       }
     }
   },
+  "SocialPosts": {
+    "page": {
+      "title": "소셜 게시물",
+      "subtitle": "이미지나 동영상을 Facebook과 Instagram에 자동으로 게시하도록 예약하세요.",
+      "newPost": "새 게시물",
+      "noPostsYet": "아직 예약된 게시물이 없습니다",
+      "createFirst": "첫 게시물을 만들어 Facebook 또는 Instagram에 자동으로 게시해보세요.",
+      "table": {
+        "media": "콘텐츠",
+        "platforms": "플랫폼",
+        "status": "상태",
+        "scheduledFor": "예약 시간"
+      },
+      "errorLoad": "게시물을 불러오지 못했습니다",
+      "retry": "다시 시도",
+      "noCaption": "캡션 없음"
+    },
+    "status": {
+      "draft": "초안",
+      "scheduled": "예약됨",
+      "publishing": "게시 중",
+      "published": "게시됨",
+      "partial": "일부 완료",
+      "failed": "실패",
+      "canceled": "취소됨",
+      "platform": {
+        "pending": "대기 중",
+        "success": "게시됨",
+        "failed": "실패"
+      }
+    },
+    "new": {
+      "title": "새 소셜 게시물",
+      "subtitle": "콘텐츠를 업로드하고, 플랫폼을 선택하고, 게시 시점을 예약하세요.",
+      "steps": {
+        "platforms": "플랫폼",
+        "content": "콘텐츠",
+        "schedule": "예약",
+        "review": "검토"
+      },
+      "toastNotSignedIn": "로그인되어 있지 않습니다.",
+      "toastNoMedia": "먼저 이미지나 동영상을 업로드하세요.",
+      "toastNoPlatform": "플랫폼을 하나 이상 선택하세요.",
+      "toastNoSchedule": "먼저 날짜와 시간을 선택하세요.",
+      "toastDraftSaved": "초안이 저장되었습니다",
+      "toastScheduled": "게시물이 예약되었습니다"
+    },
+    "detail": {
+      "backToList": "소셜 게시물로 돌아가기",
+      "notFound": "게시물을 찾을 수 없습니다",
+      "scheduledFor": "{date}에 예약됨",
+      "retry": "다시 시도",
+      "toastRetryQueued": "재시도 대기열에 추가되었습니다 — 다음 처리 시 게시됩니다.",
+      "toastRetryFailed": "재시도 등록에 실패했습니다",
+      "publishedId": "게시물 ID: {id}"
+    },
+    "wizard": {
+      "choosePlatforms": {
+        "title": "플랫폼 선택",
+        "subtitle": "이 게시물을 게시할 위치를 선택하세요 — Facebook, Instagram 또는 둘 다.",
+        "noConnectionWarning": "아직 연결된 Facebook 페이지나 Instagram 계정이 없습니다.",
+        "goToSettings": "설정에서 연결하기",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "connected": "연결됨",
+        "notConnected": "연결 안 됨",
+        "cancel": "취소",
+        "next": "다음"
+      },
+      "content": {
+        "title": "콘텐츠 업로드",
+        "subtitle": "이미지나 동영상을 추가하고 캡션을 작성하세요.",
+        "fileTooLarge": "파일이 너무 큽니다 — 제한은 {max}MB입니다.",
+        "uploadFailed": "업로드에 실패했습니다.",
+        "selectFile": "이미지 또는 동영상 선택",
+        "fileHint": "JPEG, PNG, MP4 또는 MOV — 최대 100MB",
+        "uploading": "업로드 중...",
+        "caption": "캡션",
+        "captionPlaceholder": "이 게시물의 캡션을 작성하세요...",
+        "back": "뒤로",
+        "next": "다음"
+      },
+      "schedule": {
+        "title": "예약",
+        "subtitle": "이 게시물이 게시될 시점을 선택하세요.",
+        "dateTime": "날짜 및 시간",
+        "publishNow": "지금 게시",
+        "back": "뒤로",
+        "next": "다음"
+      },
+      "review": {
+        "title": "검토 및 확인",
+        "subtitle": "게시하기 전에 모든 내용을 다시 확인하세요.",
+        "willPublishNow": "확인하면 즉시 게시됩니다.",
+        "willPublishAt": "{date}에 게시되도록 예약됩니다.",
+        "saveDraft": "초안으로 저장",
+        "publishNow": "지금 게시",
+        "schedule": "게시 예약",
+        "confirmTitle": "게시물 확인",
+        "confirmDescNow": "이 게시물은 즉시 게시됩니다. 이 작업은 취소할 수 없습니다.",
+        "confirmDescScheduled": "이 게시물은 {date}에 자동으로 게시됩니다. 이 작업은 취소할 수 없습니다.",
+        "cancel": "취소",
+        "back": "뒤로"
+      }
+    }
+  },
   "Automations": {
     "list": {
       "title": "자동화",
@@ -1493,12 +1600,64 @@
       "step4_5": "\"messages\" 웹훅 필드를 구독",
       "metaDocs": "Meta WhatsApp API 문서"
     },
+    "social": {
+      "title": "Facebook & Instagram 연결",
+      "description": "Facebook 페이지(및 선택적으로 연결된 Instagram 비즈니스 계정)를 연결하면 게시물 예약 기능이 대신 게시할 수 있습니다.",
+      "toastLoadFailed": "소셜 설정을 불러오지 못했습니다",
+      "toastPageIdRequired": "페이지 ID가 필요합니다",
+      "toastTokenRequired": "처음 설정할 때는 페이지 액세스 토큰이 필요합니다",
+      "toastReenterToken": "변경 사항을 저장하려면 페이지 액세스 토큰을 다시 입력하세요",
+      "toastSaveFailed": "설정을 저장하지 못했습니다",
+      "toastConnected": "{name}에 연결되었습니다",
+      "toastConnectedGeneric": "Facebook 페이지가 연결되었습니다.",
+      "toastTestOk": "연결 테스트 성공",
+      "toastTestFailed": "연결 테스트 실패",
+      "toastResetFailed": "설정을 초기화하지 못했습니다",
+      "toastResetOk": "설정이 삭제되었습니다. 이제 자격 증명을 다시 입력할 수 있습니다.",
+      "resetConfirm": "현재 소셜 설정을 삭제하고 다시 입력할 수 있게 됩니다. 계속할까요?",
+      "tokenCorruptedTitle": "저장된 토큰을 해독할 수 없습니다",
+      "resetting": "초기화 중...",
+      "resetConfig": "설정 초기화",
+      "credentialsValid": "자격 증명 유효함",
+      "notConnected": "연결 안 됨",
+      "connectedDesc": "페이지 토큰이 유효하며 게시할 준비가 되었습니다.",
+      "notConnectedDesc": "아래에 Facebook 페이지 자격 증명을 입력해 연결하세요.",
+      "igNotVerifiedTitle": "Instagram 계정이 확인되지 않았습니다",
+      "igNotVerifiedDesc": "페이지는 연결되었지만 Instagram 비즈니스 계정 ID를 확인할 수 없습니다. Meta Business Suite에서 다시 확인하세요.",
+      "credentialsTitle": "페이지 자격 증명",
+      "credentialsDesc": "Facebook 페이지(및 선택적으로 연결된 Instagram) 자격 증명을 입력하세요.",
+      "pageId": "Facebook 페이지 ID",
+      "pageAccessToken": "페이지 액세스 토큰",
+      "pageAccessTokenPlaceholder": "페이지 액세스 토큰을 입력하세요",
+      "tokenHidden": "보안을 위해 토큰이 숨겨져 있습니다. 설정을 업데이트하려면 다시 입력하세요.",
+      "igBusinessAccountId": "Instagram 비즈니스 계정 ID",
+      "optional": "(선택 사항)",
+      "igBusinessAccountIdHint": "Facebook에만 게시하려면 비워두세요. Meta Business Suite → Instagram 계정에서 확인할 수 있습니다.",
+      "saving": "저장 중...",
+      "saveConfig": "설정 저장",
+      "testing": "테스트 중...",
+      "testConnection": "연결 테스트",
+      "setupInstructions": "설정 방법",
+      "setupInstructionsDesc": "Facebook 페이지를 연결하려면 다음 단계를 따르세요.",
+      "step1": "장기 페이지 토큰 만들기",
+      "step1_1": "Meta Business Suite → 비즈니스 설정 → 시스템 사용자로 이동",
+      "step1_2": "페이지에 관리자 권한이 있는 시스템 사용자를 만들거나 재사용",
+      "step1_3": "pages_manage_posts와 pages_read_engagement 권한으로 토큰 생성",
+      "step2": "페이지 ID 찾기",
+      "step2_1": "페이지 → 정보 → 페이지 투명성으로 이동",
+      "step2_2": "표시된 숫자 페이지 ID를 복사",
+      "step3": "(선택) Instagram 연결",
+      "step3_1": "Meta Business Suite에서 Instagram 비즈니스 계정이 이 페이지에 연결되어 있는지 확인",
+      "step3_2": "비즈니스 설정 → Instagram 계정에서 Instagram 비즈니스 계정 ID를 복사",
+      "metaDocs": "Meta 페이지 API 문서"
+    },
     "sections": {
       "overview": "개요",
       "profile": "내 프로필",
       "security": "로그인 & 보안",
       "appearance": "화면 설정",
       "whatsapp": "WhatsApp",
+      "social": "소셜",
       "templates": "템플릿",
       "fields": "필드 & 태그",
       "deals": "딜 & 통화",

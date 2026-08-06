@@ -139,6 +139,11 @@ export function SettingsOverview({
     return () => {
       cancelled = true;
     };
+    // `user?.id` (not `user`) is intentional — a token refresh yields a
+    // new `user` object with the same id, and re-running this fetch on
+    // every refresh would be wasted work. The effect body only ever
+    // reads `user.id`, captured into `userId` above.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, accountId, canManageMembers]);
 
   const displayName = profile?.full_name || profile?.email || t('yourAccount');

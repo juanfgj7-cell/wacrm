@@ -1,7 +1,7 @@
 import { NextResponse, after } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { decrypt, encrypt, isLegacyFormat } from '@/lib/whatsapp/encryption'
-import { getMediaUrl, downloadMedia } from '@/lib/whatsapp/meta-api'
+import { getMediaUrl } from '@/lib/whatsapp/meta-api'
 import { normalizePhone } from '@/lib/whatsapp/phone-utils'
 import { findExistingContact, isUniqueViolation } from '@/lib/contacts/dedupe'
 import { verifyMetaWebhookSignature } from '@/lib/whatsapp/webhook-signature'
@@ -687,16 +687,18 @@ async function processMessage(
     return
   }
 
-  // Update conversation
-  const { error: convError } = await supabaseAdmin()
-    .from('conversations')
-    .update({
-      last_message_text: contentText || `[${message.type}]`,
-      last_message_at: new Date().toISOString(),
-      unread_count: (conversation.unread_count || 0) + 1,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', conversation.id)
+  // Update conversation. Atomic RPC (migration 037) — a plain
+  // `unread_count: cached + 1` update would race two inbound messages
+  // landing close together for the same conversation (Meta redelivers,
+  // or two messages in one batch) and silently lose a count.
+  const { error: convError } = await supabaseAdmin().rpc(
+    'increment_conversation_unread',
+    {
+      p_conversation_id: conversation.id,
+      p_last_message_text: contentText || `[${message.type}]`,
+      p_last_message_at: new Date().toISOString(),
+    }
+  )
 
   if (convError) {
     console.error('Error updating conversation:', convError)
