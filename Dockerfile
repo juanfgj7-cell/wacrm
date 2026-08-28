@@ -6,17 +6,28 @@ WORKDIR /app
 
 # `next build` imports every route (including API routes) to collect page
 # data, and some modules read env vars at *module load time*, not just at
-# call time — so the build needs placeholder values present even though
-# they're never used for a real connection here. Real values are injected
-# at container runtime via docker-compose's env_file. (Same pattern used
-# for the ADMINIS deploy on this same VPS.)
-ENV NEXT_PUBLIC_SUPABASE_URL=https://placeholder.supabase.co \
-    NEXT_PUBLIC_SUPABASE_ANON_KEY=placeholder \
+# call time — so the build needs values present even though server-only
+# secrets are never used for a real connection at build time (those are
+# injected fresh at container runtime via docker-compose's env_file).
+#
+# NEXT_PUBLIC_* is different: Next.js inlines those values into the
+# client-side JS bundle AT BUILD TIME — there is no "runtime" for them.
+# Shipping a placeholder here would ship a browser bundle that tries to
+# reach a fake Supabase URL. So the *_PUBLIC_* ones must be real values,
+# passed in as build args from docker-compose (which reads them from the
+# same .env file already sitting next to it).
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ARG NEXT_PUBLIC_SITE_URL
+ARG NEXT_PUBLIC_APP_LOCALE=es
+
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL \
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY \
+    NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
+    NEXT_PUBLIC_APP_LOCALE=$NEXT_PUBLIC_APP_LOCALE \
     SUPABASE_SERVICE_ROLE_KEY=placeholder \
     ENCRYPTION_KEY=0000000000000000000000000000000000000000000000000000000000000000 \
-    META_APP_SECRET=placeholder \
-    NEXT_PUBLIC_SITE_URL=https://placeholder.example.com \
-    NEXT_PUBLIC_APP_LOCALE=es
+    META_APP_SECRET=placeholder
 
 COPY package.json package-lock.json ./
 RUN npm ci
