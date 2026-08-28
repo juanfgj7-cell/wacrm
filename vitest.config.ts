@@ -17,5 +17,22 @@ export default defineConfig({
       META_APP_SECRET: "test-meta-app-secret",
     },
     clearMocks: true,
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html", "json-summary"],
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "src/**/*.test.{ts,tsx}",
+        "src/**/*.d.ts",
+        "src/app/**/layout.tsx",
+        "src/app/**/page.tsx",
+        // Type-only barrels — nothing to execute or cover.
+        "src/types/**",
+      ],
+      // No thresholds yet — this is the first pass at measuring
+      // coverage, not enforcing it. Once `npm run test:coverage` gives
+      // us a real baseline, set floors here so CI catches new
+      // untested code instead of just reporting a number nobody reads.
+    },
   },
 });
