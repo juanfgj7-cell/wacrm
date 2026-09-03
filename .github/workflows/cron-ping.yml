@@ -1,0 +1,55 @@
+name: Ping cron endpoints
+
+# GitHub Actions is standing in for the Vercel Cron this repo doesn't
+# have on a Hostinger/Docker deploy. It hits the three GET endpoints
+# that drain due work — social post scheduler, automation "Wait"
+# steps, and abandoned-flow sweeps — every 5 minutes. Each endpoint
+# no-ops instantly if there's nothing due, so this is cheap to run
+# this often. See src/app/api/{social,automations,flows}/cron/route.ts.
+#
+# Requires a repo secret CRON_SECRET matching AUTOMATION_CRON_SECRET
+# in the server's .env (Settings → Secrets and variables → Actions).
+# Requires a repo variable CRON_BASE_URL set to the deployed origin,
+# e.g. https://crm.hayup.tech (Settings → Secrets and variables →
+# Actions → Variables tab) — no scheme-less/trailing-slash values.
+#
+# Note: GitHub disables scheduled workflows on a repo with no commits
+# in 60 days, and schedule triggers only fire off the default branch
+# — re-enable from the Actions tab if that ever happens.
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch: {}
+
+concurrency:
+  group: cron-ping
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    name: Drain due cron work
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hit social/automations/flows cron endpoints
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          BASE_URL: ${{ vars.CRON_BASE_URL }}
+        run: |
+          set -u
+          if [ -z "${BASE_URL:-}" ]; then
+            echo "::error::CRON_BASE_URL repo variable is not set — see Settings > Secrets and variables > Actions > Variables"
+            exit 1
+          fi
+          status=0
+          for path in social automations flows; do
+            url="${BASE_URL%/}/api/${path}/cron"
+            echo "→ GET ${url}"
+            code=$(curl -sS -o /tmp/resp.json -w '%{http_code}' \
+              -H "x-cron-secret: ${CRON_SECRET}" "${url}") || code=000
+            echo "  status ${code}: $(cat /tmp/resp.json 2>/dev/null)"
+            if [ "${code}" != "200" ]; then
+              echo "::warning::${path}/cron returned ${code}"
+              status=1
+            fi
+          done
+          exit "${status}"
